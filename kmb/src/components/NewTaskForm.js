@@ -1,3 +1,5 @@
+import { useContext } from 'react';
+
 import { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -6,6 +8,8 @@ import Box from '@material-ui/core/Box';
 import Input from '@material-ui/core/Input';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+
+import AppContext from '../context/AppContext';
 
 const useStyles = makeStyles({
   root: {
@@ -33,6 +37,7 @@ const useStyles = makeStyles({
 
 export default function NewTaskForm() {
   const classes = useStyles();
+  const appContext = useContext(AppContext);
 
   const [values, setValues] = useState({
     task: "",
@@ -69,6 +74,12 @@ export default function NewTaskForm() {
      * TODO: Need to submit task to the task collection.
      * Task collection should be held in Context (probably AppContext)
      */
+
+    appContext.addTask({
+       task: values.task,
+       notes: values.notes,
+       minutes: time
+     })
   }
 
   return (

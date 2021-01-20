@@ -5,9 +5,11 @@ import {
 import { Helmet } from 'react-helmet';
 import { makeStyles } from '@material-ui/core/styles';
 
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
+import Header from '../../containers/Header';
+import Footer from '../../containers/Footer';
 import Home from '../Home';
+
+import AppState from '../../context/AppState';
 
 const useStyles = makeStyles({
   root: {
@@ -30,16 +32,18 @@ export default function App() {
 
   return (
     <div className={classes.root}>
-      <Helmet defaultTitle="Keep Me Busy">
-        <meta name="description" content="An app to decide what you'll be working on." />
-      </Helmet>
-      <Header />
-      <Switch>
-        <Route path="/" component={Home} />
-      </Switch>
-      <div className={classes.footer}>
-        <Footer />
-      </div>
+      <AppState>
+        <Helmet defaultTitle="Keep Me Busy">
+          <meta name="description" content="An app to decide what you'll be working on." />
+        </Helmet>
+        <Header />
+        <Switch>
+          <Route path="/" component={Home} />
+        </Switch>
+        <div className={classes.footer}>
+          <Footer />
+        </div>
+      </AppState>
     </div>
   )
 }
