@@ -14,7 +14,8 @@ import AppContext from '../context/AppContext';
 const useStyles = makeStyles({
   root: {
     padding: 5,
-    margin: 10,
+    margin: '10px',
+    borderRadius: '1.5rem',
   },
   time: {
     display: 'flex',
@@ -51,7 +52,6 @@ export default function NewTaskForm() {
       /** 
        * TODO: Need to use refs to allow for an input field that moves focus once
        * there is a single number entered in this input box. ex. focus(hour) => type(1) => focus(minute)
-       * 
        */
       if (e.target.value >= 0) {
         setValues({
@@ -68,18 +68,30 @@ export default function NewTaskForm() {
   }
 
   const handleSubmit = e => {
-    e.preventDefault()
-    let time = values.hour * 60 + values.minute //Time can be turned into one value for easier storage
-    /**
-     * TODO: Need to submit task to the task collection.
-     * Task collection should be held in Context (probably AppContext)
-     */
+    let alreadyATask = appContext.tasks.some((task) => task.task === values.task)
 
-    appContext.addTask({
-       task: values.task,
-       notes: values.notes,
-       minutes: time
-     })
+    if (values.task === "") {
+      // Alert user that there is no task filled in
+    } else if (values.hour === 0 && values.minute === 0) {
+      // Alert user there needs to be a time for tasks
+    } else if (alreadyATask) {
+      // Alert user that there is already a task in the task list
+    } else {
+      let time = values.hour * 60 + parseInt(values.minute)
+      
+      appContext.addTask({
+        task: values.task,
+        notes: values.notes,
+        minutes: time
+      })
+
+      setValues({
+        task: "",
+        minute: 0,
+        hour: 0,
+        notes: ""
+      });
+    }
   }
 
   return (

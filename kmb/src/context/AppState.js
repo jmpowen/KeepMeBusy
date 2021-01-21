@@ -16,7 +16,6 @@ const AppState = (props) => {
   const [state, dispatch] = useReducer(AppReducer, initialState);
 
   const addTask = (task) => {
-    console.log(task)
     dispatch({ type: ADD_TASK, payload: task })
   }
 

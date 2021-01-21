@@ -1,13 +1,10 @@
 // import { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
 
+import Column1 from '../../containers/Column1';
+import Column2 from '../../containers/Column2';
 import Column3 from '../../containers/Column3';
 
-import NewTaskForm from '../../components/NewTaskForm';
 // import appContext from '../../context/AppContext';
 
 const useStyles = makeStyles({
@@ -22,7 +19,8 @@ const useStyles = makeStyles({
     width: '100%',
   },
   column: {
-    width: '33.3%'
+    width: '33.3%',
+    background: '#1abc9c',
   },
   card: {
     boxShadow: '0 8px 24px 0 rgba(0,0,0,0.12)',
@@ -42,30 +40,15 @@ export default function Home() {
   const classes = useStyles();
   // const AppContext = useContext(appContext);
 
-  const handleClick = event => {
-
-  }
-
   return (
     <div className={classes.root}>
       <div className={classes.columns}>
         <div className={classes.column}>
-          {/* Column 1 */}
-          <Card className={classes.card}>
-            <Box className={classes.cardHeader}>
-              <Typography variant="h4" component="h4">
-                New Task
-              </Typography>
-              <NewTaskForm />
-            </Box>
-          </Card>
+          <Column1 />
         </div>
         <div className={classes.column}>
-          <div>
-            Wondering what to do right now?
+          <Column2 />
           </div>
-          <Button variant="contained" color="primary" onClick={handleClick}>Click Me!</Button>
-        </div>
         <div className={classes.column}>
           {/* TODO: Timer over here with last task, if ongoing - time is counting down from the initial time that was given when created,
             if ongoing (and 'Click Me' is pressed) - a red 'X' appears over the timer and task is reported as incompleted 
