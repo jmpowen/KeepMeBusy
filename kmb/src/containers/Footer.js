@@ -1,5 +1,6 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import Zoom from '@material-ui/core/Zoom';
 
 import AppContext from '../context/AppContext';
 import TaskCard from '../components/TaskCard';
@@ -24,12 +25,19 @@ export default function Footer() {
 
   return (
     <div className={classes.root}>
+      <React.StrictMode>
+
       {/*TODO: Keep a group of tasks in a box down here, each new task gets added to this box*/}
       {appContext.tasks.length 
         ? appContext.tasks.map((task) => (
-          <TaskCard taskObj={task} />
+          <div key={task.task}>
+          <Zoom in={true}>
+            <TaskCard taskObj={task} />
+          </Zoom>
+          </div>
         ))
-      : null}
+        : null}
+        </React.StrictMode>
     </div>
   );
 }
