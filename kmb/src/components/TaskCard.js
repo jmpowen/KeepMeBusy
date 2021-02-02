@@ -25,7 +25,7 @@ export default function TaskCard({ taskObj }) {
         <CardActionArea>
           <CardContent>
             <Typography gutterBottom variant="h5" component="p" noWrap >
-              {task.task}
+              {task.taskName}
             </Typography>
             <Typography>
               {task.minutes} minutes

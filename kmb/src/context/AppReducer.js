@@ -6,11 +6,13 @@ export default (state, action) => {
 
   switch(type) {
     case ADD_TASK:
+      // Adding task to the task array 
       let addT = state.tasks;
       addT.push(payload);
+
       return {
         ...state,
-        tasks: addT
+        tasks: addT,
       };
     case DELETE_TASK:
       let delT = state.tasks;

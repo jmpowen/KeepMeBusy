@@ -11,6 +11,8 @@ import IconButton from '@material-ui/core/IconButton';
 
 import AppContext from '../context/AppContext';
 
+import { RandomTask } from '../helpers/SelectRandomTask';
+
 /**
  * Design Goals:
  *  - Need to have accept reject buttons span 100% across the card, dividing card in half
@@ -31,31 +33,36 @@ const useStyles = makeStyles({
   }
 })
 
-export default function TaskRoller({ taskNum }) {
+export default function TaskRoller({ duration, tod }) {
   const classes = useStyles();
   const appContext = useContext(AppContext);
 
   const [values, setValues] = useState({
     task: null,
-
   })
 
+  console.log('TaskRoller function');
+
   useEffect(() => {
+    console.log('useEffect')
+    let theTask = RandomTask(appContext.tasks, duration, tod);
+    console.log(theTask);
     setValues({
       ...values,
-      task: appContext.tasks[taskNum],
+      task: theTask,
     })
-  }, [taskNum])
+  }, [])
 
   if (!values.task) {
-    return null
+    console.log('taskRoller task');
+    return null;
   }
 
   return (
     <Card className={classes.root}>
       <CardContent>
         <Typography variant="h5" component="h2" >
-          {values.task.task}
+          {values.task.taskName}
         </Typography>
         <Typography color="textSecondary">
           {values.task.minutes} minutes

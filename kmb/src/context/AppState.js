@@ -7,7 +7,7 @@ import { ADD_TASK, DELETE_TASK } from './types';
 const AppState = (props) => {
   let initialState = {
     tasks: [],
-    currentTask: null
+    currentTask: null,
   };
 
   // No reason to use the dispatch yet,

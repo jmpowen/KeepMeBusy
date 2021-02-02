@@ -5,8 +5,8 @@ import {
 import { Helmet } from 'react-helmet';
 import { makeStyles } from '@material-ui/core/styles';
 
-import Header from '../../containers/Header';
-import Footer from '../../containers/Footer';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
 import Home from '../Home';
 
 import AppState from '../../context/AppState';
