@@ -2,7 +2,7 @@ import React, { useReducer } from 'react';
 
 import AppContext from './AppContext';
 import AppReducer from './AppReducer';
-import { ADD_TASK, DELETE_TASK } from './types';
+import { ADD_TASK, DELETE_TASK, NEW_CURRENT_TASK } from './types';
 
 const AppState = (props) => {
   let initialState = {
@@ -23,13 +23,18 @@ const AppState = (props) => {
     dispatch({ type: DELETE_TASK, payload: task })
   }
 
+  const newCurrentTask = (task) => {
+    dispatch({ type: NEW_CURRENT_TASK, payload: task })
+  }
+
   return (
     <AppContext.Provider
       value={{
         tasks: state.tasks,
         currentTask: state.currentTask,
         addTask,
-        deleteTask
+        deleteTask,
+        newCurrentTask
       }}
     >
       {props.children}

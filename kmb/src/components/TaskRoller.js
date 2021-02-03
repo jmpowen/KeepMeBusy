@@ -38,47 +38,72 @@ export default function TaskRoller({ duration, tod }) {
   const appContext = useContext(AppContext);
 
   const [values, setValues] = useState({
-    task: null,
+    tasks: null,
+    taskNo: 0,
   })
 
-  console.log('TaskRoller function');
+  const handleAccept = () => {
+    let task = values.tasks[values.taskNo];
+    appContext.newCurrentTask({
+      task
+    });
+  }
 
-  useEffect(() => {
-    console.log('useEffect')
-    let theTask = RandomTask(appContext.tasks, duration, tod);
-    console.log(theTask);
+  const handleReject = () => {
     setValues({
       ...values,
-      task: theTask,
+      taskNo: values.taskNo + 1,
+    })
+  }
+
+  useEffect(() => {
+    let theTasks = RandomTask(appContext.tasks, duration, tod);
+    setValues({
+      ...values,
+      tasks: theTasks,
     })
   }, [])
 
-  if (!values.task) {
-    console.log('taskRoller task');
-    return null;
-  }
-
   return (
-    <Card className={classes.root}>
-      <CardContent>
-        <Typography variant="h5" component="h2" >
-          {values.task.taskName}
-        </Typography>
-        <Typography color="textSecondary">
-          {values.task.minutes} minutes
-        </Typography>
-        <Typography color="textSecondary">
-          {values.task.notes}
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <IconButton className={classes.accept} color="primary" aria-label="check" component="span">
-          <DoneOutlineIcon />
-        </IconButton>
-        <IconButton className={classes.reject} color="secondary" aria-label="check" component="span">
-          <CloseIcon />
-        </IconButton>
-      </CardActions>
-    </Card>
+    <>
+      {values.tasks ?
+        values.taskNo !== values.tasks.length ?
+          <div>
+            <Card className={classes.root}>
+              <CardContent>
+                <Typography variant="h5" component="h2" >
+                  {values.tasks[values.taskNo].taskName}
+                </Typography>
+                <Typography color="textSecondary">
+                  {values.tasks[values.taskNo].minutes} minutes
+                </Typography>
+                <Typography color="textSecondary">
+                  {values.tasks[values.taskNo].notes}
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <IconButton className={classes.accept} onClick={handleAccept} color="primary" aria-label="check" component="span">
+                  <DoneOutlineIcon />
+                </IconButton>
+                <IconButton className={classes.reject} onClick={handleReject} color="secondary" aria-label="check" component="span">
+                  <CloseIcon />
+                </IconButton>
+              </CardActions>
+            </Card>
+          </div>
+          : 
+          <div>
+            <Card className={classes.root}>
+              <CardContent>
+                <Typography variant="h5" component="h2">
+                  There are no more tasks available with these filters.
+                  Go read a book.
+                </Typography>
+              </CardContent>
+            </Card>
+          </div>
+        : null
+      }
+    </>
   )
 }

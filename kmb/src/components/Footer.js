@@ -25,7 +25,6 @@ export default function Footer() {
 
   return (
     <div className={classes.root}>
-      <React.StrictMode>
 
       {/*TODO: Keep a group of tasks in a box down here, each new task gets added to this box*/}
       {appContext.tasks.length 
@@ -37,7 +36,6 @@ export default function Footer() {
           </div>
         ))
         : null}
-        </React.StrictMode>
     </div>
   );
 }

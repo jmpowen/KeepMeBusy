@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import Box from '@material-ui/core/Box';
@@ -12,7 +12,7 @@ import TimeOfDay from '../../components/TimeOfDay';
 
 import AppContext from '../../context/AppContext';
 
-import Column3 from '../../containers/Column3';
+import Timer from '../../components/Timer';
 
 const useStyles = makeStyles({
   root: {
@@ -63,8 +63,17 @@ export default function Home() {
     morning: false,
     afternoon: false,
     night: false,
-    tod: []
+    tod: [],
+    currentTask: null,
   })
+
+  useEffect(() => {
+    console.log('here')
+    setValues({
+      ...values,
+      currentTask: appContext.currentTask
+    })
+  }, [appContext.currentTask])
 
   const handleDurationChange = (e, newValue) => {
     setValues({
@@ -119,7 +128,7 @@ export default function Home() {
           <div className={classes.title}>
             Wondering what to do right now?
           </div>
-          {values.taskTime
+          {appContext.currentTask === null && values.taskTime
             ? <TaskRoller duration={values.duration} tod={values.tod} />
             : <div>
                 <Slider
@@ -147,7 +156,12 @@ export default function Home() {
           {/* TODO: Timer over here with last task, if ongoing - time is counting down from the initial time that was given when created,
             if ongoing (and 'Click Me' is pressed) - a red 'X' appears over the timer and task is reported as incompleted 
             if done (timer expired) - green checkmark shows and  task is reported as completed*/}
-          <Column3 />
+          {values.currentTask !== null ?
+            <div>
+              hello
+            </div>
+            : null
+          }
         </div>
       </div>
     </div>

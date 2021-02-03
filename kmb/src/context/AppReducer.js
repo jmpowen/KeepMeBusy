@@ -1,4 +1,4 @@
-import { ADD_TASK, DELETE_TASK } from './types';
+import { ADD_TASK, DELETE_TASK, NEW_CURRENT_TASK } from './types';
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (state, action) => {
@@ -21,6 +21,11 @@ export default (state, action) => {
         ...state,
         tasks: delT
       };
+    case NEW_CURRENT_TASK:
+      return {
+        ...state,
+        currentTask: payload
+      }
     default:
       return state;
   }
