@@ -12,7 +12,7 @@ import TimeOfDay from '../../components/TimeOfDay';
 
 import AppContext from '../../context/AppContext';
 
-import Timer from '../../components/Timer';
+import Timer from '../../components/ATimer';
 
 const useStyles = makeStyles({
   root: {

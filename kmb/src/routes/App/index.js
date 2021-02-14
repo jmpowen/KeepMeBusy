@@ -7,7 +7,9 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+
 import Home from '../Home';
+import Timer from '../Timer';
 
 import AppState from '../../context/AppState';
 
@@ -38,7 +40,8 @@ export default function App() {
         </Helmet>
         <Header />
         <Switch>
-          <Route path="/" component={Home} />
+          <Route exact path="/" component={Home} />
+          <Route path="/timer" component={Timer} />
         </Switch>
         <div className={classes.footer}>
           <Footer />
