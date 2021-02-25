@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 
 export default function CountdownTimer({ time }) {
     const [timeLeft, setTimeLeft] = useState(time * 60);

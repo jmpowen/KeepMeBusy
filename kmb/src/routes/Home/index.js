@@ -9,10 +9,9 @@ import Slider from '@material-ui/core/Slider';
 import NewTaskForm from '../../components/NewTaskForm';
 import TaskRoller from '../../components/TaskRoller';
 import TimeOfDay from '../../components/TimeOfDay';
+import CountdownTimer from '../../components/CountdownTimer';
 
 import AppContext from '../../context/AppContext';
-
-import Timer from '../../components/ATimer';
 
 const useStyles = makeStyles({
   root: {
@@ -48,6 +47,23 @@ const useStyles = makeStyles({
   },
   title: {
     color: 'white'
+  },
+  currentTaskColumn: {
+    backgroundColor: 'white',
+    borderRadius: '1.5rem',
+  },
+  currentTaskButtons: {
+
+  },
+  currentTaskButtonC: {
+    margin: 10,
+    backgroundColor: 'green',
+    color: 'white'
+  },
+  currentTaskButtonF: {
+    margin: 10,
+    backgroundColor: 'red',
+    color: 'white'
   }
 })
 
@@ -66,14 +82,6 @@ export default function Home() {
     tod: [],
     currentTask: null,
   })
-
-  useEffect(() => {
-    console.log('here')
-    setValues({
-      ...values,
-      currentTask: appContext.currentTask
-    })
-  }, [appContext.currentTask])
 
   const handleDurationChange = (e, newValue) => {
     setValues({
@@ -109,6 +117,17 @@ export default function Home() {
     }
   }
 
+  const handleTaskCompletedFailed = (status) => { // status is a string, either "completed" or "failed"
+    setValues({
+      ...values,
+      taskTime: false
+    });
+    appContext.newCurrentTask(null);
+    /*  Need to make a task logged fetch request here,
+        record the task, the completion status, time left if failed, time left if completed,
+        current time */
+  }
+
   return (
     <div className={classes.root}>
       <div className={classes.columns}>
@@ -128,7 +147,7 @@ export default function Home() {
           <div className={classes.title}>
             Wondering what to do right now?
           </div>
-          {appContext.currentTask === null && values.taskTime
+          {appContext.currentTask === null && values.taskTime 
             ? <TaskRoller duration={values.duration} tod={values.tod} />
             : <div>
                 <Slider
@@ -155,10 +174,16 @@ export default function Home() {
         <div className={classes.column}>
           {/* TODO: Timer over here with last task, if ongoing - time is counting down from the initial time that was given when created,
             if ongoing (and 'Click Me' is pressed) - a red 'X' appears over the timer and task is reported as incompleted 
-            if done (timer expired) - green checkmark shows and  task is reported as completed*/}
-          {values.currentTask !== null ?
-            <div>
-              hello
+            if done (timer expired) - green checkmark shows and task is reported as completed*/}
+          {appContext.currentTask !== null ?
+            <div className={classes.currentTaskColumn}>
+              <div>
+                <CountdownTimer time={appContext.currentTask.minutes} />
+              </div>
+              <div className={classes.currentTaskButtons}>
+                <Button className={classes.currentTaskButtonC} onClick={() => handleTaskCompletedFailed("completed")}>Completed</Button>
+                <Button className={classes.currentTaskButtonF} onClick={() => handleTaskCompletedFailed("failed")}>Failed</Button>
+              </div>
             </div>
             : null
           }

@@ -44,9 +44,7 @@ export default function TaskRoller({ duration, tod }) {
 
   const handleAccept = () => {
     let task = values.tasks[values.taskNo];
-    appContext.newCurrentTask({
-      task
-    });
+    appContext.newCurrentTask(task);
   }
 
   const handleReject = () => {
