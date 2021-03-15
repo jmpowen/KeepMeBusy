@@ -12,6 +12,10 @@ const useStyles = makeStyles({
   root: {
     color: '#6CEF1F',
     textAlign: 'center',
+    width: '100%',
+  },
+  columns: {
+    textAlign: 'center',
     display: 'flex',
     width: '100%',
   },
@@ -21,6 +25,9 @@ const useStyles = makeStyles({
     width: '40%',
     padding: '5%',
   },
+  addTasksButton: {
+    backgroundColor: '#4DBD0C',
+  }
 })
 
 export default function Tasks() {
@@ -97,19 +104,29 @@ export default function Tasks() {
     // can return to the same spot in the array, values does not matter so much
   }
 
+  const handleAddTasks = () => {
+
+  }
+
   return (
     <div className={classes.root}>
-      <div className={classes.column}>
-        {fetchedData.tasks && fetchedData.tasks.map(task => (
-          <EditableTaskCard taskObj={task} handleTaskSelected={handleTaskSelected}/>
-        ))}
+      <div className={classes.columns}>
+        <div className={classes.column}>
+          {fetchedData.tasks && fetchedData.tasks.map(task => (
+            <EditableTaskCard taskObj={task} handleTaskSelected={handleTaskSelected}/>
+          ))}
+        </div>
+        <div className={classes.column}>
+          {values.tasks && values.tasks.map(task => (
+            <SelectableTaskCard taskObj={task} handleTaskSelected={handleTaskSelected}/>
+          ))}
+        </div>
       </div>
-      <div className={classes.column}>
-        {values.tasks && values.tasks.map(task => (
-          <SelectableTaskCard taskObj={task} handleTaskSelected={handleTaskSelected}/>
-        ))}
+      <div>
+        <Button className={classes.addTasksButton} onClick={handleAddTasks} variant="outlined" size="large">
+          Add Tasks
+        </Button>
       </div>
-      <Button  />
     </div>
   )
 }
