@@ -38,7 +38,7 @@ export default function Header() {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            Horizons
+            Keep Me Busy!
           </Typography>
           {accessToken !== null ?
               <Button onClick={handleLogout} color="inherit">Logout</Button>

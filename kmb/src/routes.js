@@ -7,6 +7,7 @@ import Header from './containers/Header';
 import Home from './containers/Home';
 import Login from './containers/Login';
 import SignUp from './containers/SignUp';
+import Tasks from './containers/Tasks';
 
 import ProtectedRoute from './hoc/ProtectedRoute';
 
@@ -17,7 +18,8 @@ export default function AppRoutes() {
       <Switch>
         <Route path="/login" component={Login} />
         <Route path="/signup" component={SignUp} />
-        <ProtectedRoute exact path="/" component={Home} />
+        <Route exact path="/" component={Home} />
+        <Route path="/tasks" component={Tasks} />
       </Switch>
     </Router>
   )

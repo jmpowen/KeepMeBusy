@@ -15,12 +15,13 @@ const useStyles = makeStyles({
   }
 })
 
-export default function TaskCard({ taskObj }) {
+export default function TaskCard({ taskObj, handleTaskSelected }) {
   const classes = useStyles();
   let task = taskObj;
+  
   return (
       <Card className={classes.root}>
-        <CardActionArea>
+        <CardActionArea onClick={() => handleTaskSelected(task.id)}>
           <CardContent>
             <Typography gutterBottom variant="h5" component="p" noWrap >
               {task.taskName}
