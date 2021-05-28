@@ -22,7 +22,7 @@ const useStyles = makeStyles({
   card: {
     margin: 'auto',
     width: '30%',
-    boxShadow: '10px 10px 10px grey',
+    boxShadow: '10px 10px 10px 10px grey',
   },
   textFields: {
     padding: 10,

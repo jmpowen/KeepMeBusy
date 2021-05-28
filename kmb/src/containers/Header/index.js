@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -17,6 +17,19 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
       flexGrow: 1,
+      width: 200
+    },
+    navButtons: {
+      marginLeft: '2%',
+      width: '100%',
+      float: 'left',
+    },
+    navButton: {
+      color: 'white',
+      '&:focus': {
+        border: '1px solid black',
+        color: 'black',
+      },
     },
   }));
 
@@ -28,6 +41,10 @@ export default function Header() {
   // localStorage value changes and that isn't happening on its own.
   // Maybe using state after localstorage will do it...
   const [accessToken, setAccessToken] = useLocalStorage('token', null);
+
+  const handleNavigation = (route) => {
+    history.push(route);
+  }
 
   const handleLogout = () => {
     setAccessToken(null);
@@ -43,6 +60,34 @@ export default function Header() {
           <Typography variant="h6" className={classes.title}>
             Keep Me Busy!
           </Typography>
+          {accessToken ? (
+            <div className={classes.navButtons}>
+              <Button
+                onClick={() => handleNavigation('/analytics')}
+                className={classes.navButton}
+              >
+                Analytics
+              </Button>
+              <Button
+                onClick={() => handleNavigation('/profile')}
+                className={classes.navButton}
+              >
+                Profile
+              </Button>
+              <Button
+                onClick={() => handleNavigation('/')}
+                className={classes.navButton}
+              >
+                Dashboard
+              </Button>
+              <Button
+                onClick={() => handleNavigation('/tasks')}
+                className={classes.navButton}
+              >
+                Tasks
+              </Button>
+            </div>
+          ) : null}
           {accessToken !== null ?
               <Button onClick={handleLogout} color="inherit">Logout</Button>
             :

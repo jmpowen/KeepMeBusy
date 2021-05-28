@@ -18,8 +18,8 @@ export default function AppRoutes() {
       <Switch>
         <Route path="/login" component={Login} />
         <Route path="/signup" component={SignUp} />
-        <Route exact path="/" component={Home} />
-        <Route path="/tasks" component={Tasks} />
+        <ProtectedRoute exact path="/" component={Home} />
+        <ProtectedRoute path="/tasks" component={Tasks} />
       </Switch>
     </Router>
   )
