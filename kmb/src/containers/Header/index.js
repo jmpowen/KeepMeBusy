@@ -5,6 +5,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 import useLocalStorage from '../../hooks/useLocalStorage';
 
@@ -17,7 +18,10 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
       flexGrow: 1,
-      width: 200
+      width: 200,
+      '&:hover': {
+        cursor: 'pointer',
+      },
     },
     navButtons: {
       marginLeft: '2%',
@@ -57,7 +61,7 @@ export default function Header() {
     <div className={classes.root}>
       <AppBar position="static" className={classes.appBar}>
         <Toolbar>
-          <Typography variant="h6" className={classes.title}>
+          <Typography variant="h6" className={classes.title} onClick={() => handleNavigation('/')}>
             Keep Me Busy!
           </Typography>
           {accessToken ? (
@@ -73,12 +77,6 @@ export default function Header() {
                 className={classes.navButton}
               >
                 Profile
-              </Button>
-              <Button
-                onClick={() => handleNavigation('/')}
-                className={classes.navButton}
-              >
-                Dashboard
               </Button>
               <Button
                 onClick={() => handleNavigation('/tasks')}
