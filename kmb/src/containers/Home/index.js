@@ -23,6 +23,10 @@ const useStyles = makeStyles({
     width: '100%',
     height: 500,
   },
+  options: {
+    textAlign: 'center',
+    width: '30%',
+  },
   currentTaskColumn: {
     backgroundColor: 'white',
     borderRadius: '1.5rem',
@@ -111,7 +115,7 @@ export default function Home() {
           {appContext.currentTask === null && values.taskTime ? (
             <TaskRoller duration={values.duration} tod={values.tod} />
           ) : (
-            <div>
+            <div className={classes.options}>
               <Slider
                 min={0}
                 step={30}
