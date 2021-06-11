@@ -1,10 +1,8 @@
 import { useState, useContext, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Slider from '@material-ui/core/Slider';
+import Typography from '@material-ui/core/Typography';
 
 import NewTaskForm from '../../components/NewTaskForm';
 import TaskRoller from '../../components/TaskRoller';
@@ -17,55 +15,34 @@ const useStyles = makeStyles({
   root: {
     textAlign: 'center',
     fontFamily: 'sans-serif',
-    fontSize: '30px'
+    fontSize: '30px',
+    height: '100%',
   },
-  columns: {
+  row: {
     textAlign: 'center',
-    display: 'flex',
     width: '100%',
+    height: 500,
   },
-  column: {
-    width: '33.3%',
-    background: '#1abc9c',
-  },
-  card: {
-    boxShadow: '0 8px 24px 0 rgba(0,0,0,0.12)',
-    margin: 50,
-    padding: 12,
-    borderRadius: '1.5rem',
-  },
-  cardHeader: {
-    background: '#1abc9c',
-    color: 'white',
-    fontFamily: 'sans-serif',
-    borderRadius: '1.5rem',
-  },
-  column1: {
+  options: {
     textAlign: 'center',
-    fontFamily: 'sans-serif',
-    fontSize: '30px'
-  },
-  title: {
-    color: 'white'
+    width: '30%',
   },
   currentTaskColumn: {
     backgroundColor: 'white',
     borderRadius: '1.5rem',
   },
-  currentTaskButtons: {
-
-  },
+  currentTaskButtons: {},
   currentTaskButtonC: {
     margin: 10,
     backgroundColor: 'green',
-    color: 'white'
+    color: 'white',
   },
   currentTaskButtonF: {
     margin: 10,
     backgroundColor: 'red',
-    color: 'white'
-  }
-})
+    color: 'white',
+  },
+});
 
 export default function Home() {
   const classes = useStyles();
@@ -81,114 +58,118 @@ export default function Home() {
     night: false,
     tod: [],
     currentTask: null,
-  })
+  });
 
   const handleDurationChange = (e, newValue) => {
     setValues({
       ...values,
-      duration: newValue
-    })
-  }
+      duration: newValue,
+    });
+  };
 
-  const handleClick = event => {
+  const handleClick = (event) => {
     if (!appContext.tasks) {
-      // Alert the user there is no tasks 
+      // Alert the user there is no tasks
     } else {
       let tod = [];
 
       if (values.morning) {
-        tod.push('morning')
+        tod.push('morning');
       }
       if (values.afternoon) {
-        tod.push('afternoon')
+        tod.push('afternoon');
       }
       if (values.night) {
-        tod.push('night')
+        tod.push('night');
       }
       if (values.anytime) {
-        tod.push('anytime')
+        tod.push('anytime');
       }
 
       setValues({
         ...values,
         taskTime: true,
         tod: tod,
-      })
+      });
     }
-  }
+  };
 
-  const handleTaskCompletedFailed = (status) => { // status is a string, either "completed" or "failed"
+  const handleTaskCompletedFailed = (status) => {
+    // status is a string, either "completed" or "failed"
     setValues({
       ...values,
-      taskTime: false
+      taskTime: false,
     });
     appContext.newCurrentTask(null);
     /*  Need to make a task logged fetch request here,
         record the task, the completion status, time left if failed, time left if completed,
         current time */
-  }
+  };
 
   return (
     <div className={classes.root}>
-      <div className={classes.columns}>
-        <div className={classes.column}>
-          <div className={classes.column1}>
-            <Card className={classes.card}>
-              <Box className={classes.cardHeader}>
-                <Typography variant="h4" component="h4">
-                  New Task
-                </Typography>
-                <NewTaskForm />
-              </Box>
-            </Card>
-          </div>
-        </div>
-        <div className={classes.column}>
-          <div className={classes.title}>
+      <div className={classes.row}>
+          <Typography variant="h3"  >
             Wondering what to do right now?
-          </div>
-          {appContext.currentTask === null && values.taskTime 
-            ? <TaskRoller duration={values.duration} tod={values.tod} />
-            : <div>
-                <Slider
-                  min={0}
-                  step={30}
-                  max={300}
-                  marks
-                  value={values.duration}
-                  onChange={handleDurationChange}
-                  valueLabelDisplay="auto"
-                />
-                <TimeOfDay 
-                  row={true} 
-                  values={values} 
-                  setValues={setValues} />
-                <Button 
-                  disabled={appContext.tasks.length === 0 || values.duration === 0 || (values.anytime === false && values.morning === false && values.afternoon === false && values.night === false)} 
-                  variant="contained" 
-                  color="primary" 
-                  onClick={handleClick}>Click Me!</Button>
-              </div>
-          }
-        </div>
-        <div className={classes.column}>
-          {/* TODO: Timer over here with last task, if ongoing - time is counting down from the initial time that was given when created,
-            if ongoing (and 'Click Me' is pressed) - a red 'X' appears over the timer and task is reported as incompleted 
-            if done (timer expired) - green checkmark shows and task is reported as completed*/}
-          {appContext.currentTask !== null ?
-            <div className={classes.currentTaskColumn}>
-              <div>
-                <CountdownTimer time={appContext.currentTask.minutes} />
-              </div>
-              <div className={classes.currentTaskButtons}>
-                <Button className={classes.currentTaskButtonC} onClick={() => handleTaskCompletedFailed("completed")}>Completed</Button>
-                <Button className={classes.currentTaskButtonF} onClick={() => handleTaskCompletedFailed("failed")}>Failed</Button>
-              </div>
+          </Typography>
+          {appContext.currentTask === null && values.taskTime ? (
+            <TaskRoller duration={values.duration} tod={values.tod} />
+          ) : (
+            <div className={classes.options}>
+              <Slider
+                min={0}
+                step={30}
+                max={300}
+                marks
+                value={values.duration}
+                onChange={handleDurationChange}
+                valueLabelDisplay='auto'
+              />
+              <TimeOfDay row={true} values={values} setValues={setValues} />
+              <Button
+                disabled={
+                  appContext.tasks.length === 0 ||
+                  values.duration === 0 ||
+                  (values.anytime === false &&
+                    values.morning === false &&
+                    values.afternoon === false &&
+                    values.night === false)
+                }
+                variant='contained'
+                color='primary'
+                onClick={handleClick}
+              >
+                Click Me!
+              </Button>
             </div>
-            : null
-          }
-        </div>
+          )}
+      </div>
+      <div className={classes.row}>
+        {/* TODO: Timer over here with last task, if ongoing - time is counting down from the initial time that was given when created,
+            if ongoing (and 'Click Me' is pressed) - a red 'X' appears over the timer and task is reported as incompleted 
+          if done (timer expired) - green checkmark shows and task is reported as completed*/}
+        {appContext.currentTask !== null ? (
+          <div className={classes.currentTaskColumn}>
+            <div>
+              <CountdownTimer time={appContext.currentTask.minutes} />
+            </div>
+            <div className={classes.currentTaskButtons}>
+              <Button
+                className={classes.currentTaskButtonC}
+                onClick={() => handleTaskCompletedFailed('completed')}
+              >
+                Completed
+              </Button>
+              <Button
+                className={classes.currentTaskButtonF}
+                onClick={() => handleTaskCompletedFailed('failed')}
+              >
+                Failed
+              </Button>
+            </div>
+          </div>
+        ) : null}
       </div>
     </div>
-  )
+  );
 }

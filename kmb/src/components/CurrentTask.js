@@ -37,7 +37,6 @@ export default function CurrentTask() {
 
   return (
     <Card>
-      asdf
       <Timer />
     </Card>
   )

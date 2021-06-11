@@ -6,7 +6,7 @@ export default (state, action) => {
 
   switch(type) {
     case ADD_TASK:
-      // Adding task to the task array 
+      // Adding task to the task array (might be passing an array here)
       let addT = state.tasks;
       addT.push(payload);
 
