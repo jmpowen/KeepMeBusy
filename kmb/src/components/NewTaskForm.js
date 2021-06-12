@@ -9,7 +9,7 @@ import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 
-import TimeOfDay from './TimeOfDay';
+import CheckboxOptions from './CheckboxOptions';
 
 import AppContext from '../context/AppContext';
 
@@ -48,10 +48,10 @@ export default function NewTaskForm() {
     taskName: "",
     minute: 0,
     notes: "",
-    morning: false,
-    afternoon: false,
-    night: false,
-    anytime: false,
+    Morning: false,
+    Afternoon: false,
+    Night: false,
+    Anytime: false,
   })
 
   const handleChange = (e) => {
@@ -62,19 +62,19 @@ export default function NewTaskForm() {
           [e.target.name]: e.target.value,
         })
       }
-    } else if (e.target.name === 'anytime') {
+    } else if (e.target.name === 'Anytime') {
       setValues({
         ...values,
         [e.target.name]: e.target.checked,
-        'morning': e.target.checked,
-        'afternoon': e.target.checked,
-        'night': e.target.checked
+        'Morning': e.target.checked,
+        'Afternoon': e.target.checked,
+        'Night': e.target.checked
       })
-    } else if (e.target.name === 'morning' || e.target.name === 'afternoon' || e.target.name === 'night') {
-      if (values.anytime) {
+    } else if (e.target.name === 'Morning' || e.target.name === 'Afternoon' || e.target.name === 'Night') {
+      if (values.Anytime) {
         setValues({
           ...values,
-          'anytime': e.target.checked,
+          'Anytime': e.target.checked,
           [e.target.name]: e.target.checked,
         })
       } else {
@@ -100,22 +100,22 @@ export default function NewTaskForm() {
       // Alert user there needs to be a time for tasks
     } else if (alreadyATask) {
       // Alert user that there is already a task in the task list
-    } else if (!values.anytime && !values.morning && !values.afternoon && !values.night) {
+    } else if (!values.Anytime && !values.Morning && !values.Afternoon && !values.Night) {
       // Alert user that there needs to be at least one value set
     } else {
       let tod = []
 
-      if (values.morning) {
-        tod.push('morning')
+      if (values.Morning) {
+        tod.push('Morning')
       }
-      if (values.afternoon) {
-        tod.push('afternoon')
+      if (values.Afternoon) {
+        tod.push('Afternoon')
       }
-      if (values.night) {
-        tod.push('night')
+      if (values.Night) {
+        tod.push('Night')
       }
-      if (values.anytime) {
-        tod.push('anytime')
+      if (values.Anytime) {
+        tod.push('Anytime')
       }
 
       appContext.addTask({
@@ -129,10 +129,10 @@ export default function NewTaskForm() {
         taskName: "",
         minute: 0,
         notes: "",
-        morning: false,
-        afternoon: false,
-        night: false,
-        anytime: false
+        Morning: false,
+        Afternoon: false,
+        Night: false,
+        Anytime: false
       });
     }
   }
@@ -152,7 +152,13 @@ export default function NewTaskForm() {
       <div>
         <FormControl component="fieldset" className={classes.formControl}>
           <FormLabel component="legend">Time of day</FormLabel>
-          <TimeOfDay row={false} values={values} setValues={setValues}/>
+          <CheckboxOptions
+            row={false}
+            catchAllLabel='Anytime'
+            valueLabel={['Anytime', 'Morning', 'Afternoon', 'Night']}
+            values={values}
+            setValues={setValues}
+          />
         </FormControl>
         <div className={classes.notes}>
           <TextField

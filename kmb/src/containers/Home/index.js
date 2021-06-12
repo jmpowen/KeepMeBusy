@@ -6,8 +6,8 @@ import Typography from '@material-ui/core/Typography';
 
 import NewTaskForm from '../../components/NewTaskForm';
 import TaskRoller from '../../components/TaskRoller';
-import TimeOfDay from '../../components/TimeOfDay';
 import CountdownTimer from '../../components/CountdownTimer';
+import CheckboxOptions from '../../components/CheckboxOptions';
 
 import AppContext from '../../context/AppContext';
 
@@ -19,13 +19,12 @@ const useStyles = makeStyles({
     height: '100%',
   },
   row: {
-    textAlign: 'center',
     width: '100%',
     height: 500,
   },
   options: {
-    textAlign: 'center',
-    width: '30%',
+    marginLeft: '30%',
+    marginRight: '30%'
   },
   currentTaskColumn: {
     backgroundColor: 'white',
@@ -52,10 +51,10 @@ export default function Home() {
     taskNum: null,
     taskTime: false,
     duration: 60,
-    anytime: false,
-    morning: false,
-    afternoon: false,
-    night: false,
+    Anytime: false,
+    Morning: false,
+    Afternoon: false,
+    Night: false,
     tod: [],
     currentTask: null,
   });
@@ -108,13 +107,11 @@ export default function Home() {
 
   return (
     <div className={classes.root}>
+      <h1>Wondering what to do right now?</h1>
       <div className={classes.row}>
-          <Typography variant="h3"  >
-            Wondering what to do right now?
-          </Typography>
-          {appContext.currentTask === null && values.taskTime ? (
+        {/*appContext.currentTask === null && values.taskTime ? (
             <TaskRoller duration={values.duration} tod={values.tod} />
-          ) : (
+        ) : ( */}
             <div className={classes.options}>
               <Slider
                 min={0}
@@ -125,7 +122,13 @@ export default function Home() {
                 onChange={handleDurationChange}
                 valueLabelDisplay='auto'
               />
-              <TimeOfDay row={true} values={values} setValues={setValues} />
+              <CheckboxOptions
+                row={true}
+                catchAllLabel='Anytime'
+                valueLabels={['Anytime', 'Morning', 'Afternoon', 'Night']}
+                values={values}
+                setValues={setValues}
+              />
               <Button
                 disabled={
                   appContext.tasks.length === 0 ||
@@ -139,10 +142,9 @@ export default function Home() {
                 color='primary'
                 onClick={handleClick}
               >
-                Click Me!
+                Give me something to do!
               </Button>
             </div>
-          )}
       </div>
       <div className={classes.row}>
         {/* TODO: Timer over here with last task, if ongoing - time is counting down from the initial time that was given when created,
