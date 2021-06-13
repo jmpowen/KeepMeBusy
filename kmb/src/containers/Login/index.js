@@ -29,6 +29,13 @@ const useStyles = makeStyles({
   },
   submitButton: {
     padding: 10,
+  },
+  signuplink: {
+    margin: 30,
+    color: 'blue',
+    '&:hover': {
+      cursor: 'pointer'
+    }
   }
 });
 
@@ -67,6 +74,10 @@ export default function Login() {
     }
     
     // Fetch request hur
+  }
+
+  const handleSignUp = () => {
+    history.push("/signup");
   }
 
   if (accessToken) {
@@ -109,6 +120,9 @@ export default function Login() {
             >Login</Button>
         </div>
       </Card>
+      <div className={classes.signuplink} onClick={handleSignUp}>
+        No account? Sign Up!
+      </div>
     </div>
   );
 }
