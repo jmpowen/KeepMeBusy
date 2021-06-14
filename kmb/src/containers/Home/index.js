@@ -2,7 +2,8 @@ import { useState, useContext, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Slider from '@material-ui/core/Slider';
-import Typography from '@material-ui/core/Typography';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import NewTaskForm from '../../components/NewTaskForm';
 import TaskRoller from '../../components/TaskRoller';
@@ -10,6 +11,7 @@ import CountdownTimer from '../../components/CountdownTimer';
 import CheckboxOptions from '../../components/CheckboxOptions';
 
 import AppContext from '../../context/AppContext';
+import { PostData } from '../../helpers/httpRequests';
 
 const useStyles = makeStyles({
   root: {
@@ -49,15 +51,27 @@ export default function Home() {
 
   const [values, setValues] = useState({
     taskNum: null,
-    taskTime: false,
     duration: 60,
     Anytime: false,
     Morning: false,
     Afternoon: false,
     Night: false,
     tod: [],
-    currentTask: null,
+    alert: null
   });
+
+  useEffect(() => {
+    if (values.alert === null) {
+      return;
+    }
+    toast[values.alert.type](values.alert.message);
+    setTimeout(() => {
+      setValues({
+        ...values,
+        alert: null,
+      });
+    }, 1000);
+  }, [values.alert]);
 
   const handleDurationChange = (e, newValue) => {
     setValues({
@@ -87,18 +101,33 @@ export default function Home() {
 
       setValues({
         ...values,
-        taskTime: true,
         tod: tod,
       });
     }
   };
 
-  const handleTaskCompletedFailed = (status) => {
+  const handleTaskStatus = (status) => {
     // status is a string, either "completed" or "failed"
-    setValues({
-      ...values,
-      taskTime: false,
-    });
+    let data = {};
+    data.user = appContext.user;
+    data.task = appContext.currentTask;
+    data.status = status;
+    PostData('someURL', data)
+      .then(res => res.json())
+      .then(res => {
+        if (res.length === 1) {
+          setValues({
+            ...values,
+            alert: { type: 'success', message: 'Task log recorded!' }
+          });
+        } else {
+          setValues({
+            ...values,
+            alert: { type: 'error', message: 'Task log not recorded!' }
+          });
+        }
+      })
+
     appContext.newCurrentTask(null);
     /*  Need to make a task logged fetch request here,
         record the task, the completion status, time left if failed, time left if completed,
@@ -107,6 +136,17 @@ export default function Home() {
 
   return (
     <div className={classes.root}>
+      <ToastContainer
+        position='bottom-left'
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <h1>Wondering what to do right now?</h1>
       <div className={classes.row}>
         {/*appContext.currentTask === null && values.taskTime ? (
@@ -158,13 +198,13 @@ export default function Home() {
             <div className={classes.currentTaskButtons}>
               <Button
                 className={classes.currentTaskButtonC}
-                onClick={() => handleTaskCompletedFailed('completed')}
+                onClick={() => handleTaskStatus('completed')}
               >
                 Completed
               </Button>
               <Button
                 className={classes.currentTaskButtonF}
-                onClick={() => handleTaskCompletedFailed('failed')}
+                onClick={() => handleTaskStatus('failed')}
               >
                 Failed
               </Button>

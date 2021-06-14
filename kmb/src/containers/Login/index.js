@@ -87,17 +87,19 @@ export default function Login() {
     }
     
     PostData('someURL', { USERNAME: values.username, PASSWORD: values.password })
-    .then(res => {
-      if (res.status === 200) {
-        history.push('/');
-      } else {
-        setValues({
-          ...values,
-          alert: { type: 'error', message: 'Error occurred. Try again.' }
-        });
-      }
-    })
-    .catch(err => console.log(err))
+      .then(res => res.json())
+      .then(res => {
+        if (res.length === 1) {
+          appContext.setUser(res)
+          history.push('/');
+        } else {
+          setValues({
+            ...values,
+            alert: { type: 'error', message: 'Error occurred. Try again.' }
+          });
+        }
+      })
+      .catch(err => console.log(err))
   }
 
   const handleSignUp = () => {
