@@ -1,4 +1,4 @@
-import { ADD_TASK, DELETE_TASK, NEW_CURRENT_TASK, SET_USER } from './types';
+import { ADD_TASK, DELETE_TASK, NEW_CURRENT_TASK, SET_GEN_DATA, SET_USER, SET_USER_DATA } from './types';
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (state, action) => {
@@ -26,10 +26,20 @@ export default (state, action) => {
         ...state,
         currentTask: payload
       }
+    case SET_GEN_DATA:
+      return {
+        ...state,
+        genData: payload
+      }
     case SET_USER:
       return {
         ...state,
         user: payload
+      }
+    case SET_USER_DATA:
+      return {
+        ...state,
+        userData: payload
       }
     default:
       return state;
