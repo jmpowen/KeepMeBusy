@@ -1,11 +1,12 @@
-import { useState, useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from "@material-ui/core/styles";
 import Card from '@material-ui/core/Card';
 import TextField from "@material-ui/core/TextField";
 import Button from '@material-ui/core/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Alert from '@material-ui/lab/Alert';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import AppContext from '../../context/AppContext';
 
@@ -33,6 +34,7 @@ const useStyles = makeStyles({
   signuplink: {
     margin: 30,
     color: 'blue',
+    textDecoration: 'underline',
     '&:hover': {
       cursor: 'pointer'
     }
@@ -47,12 +49,21 @@ export default function Login() {
   const [values, setValues] = useState({
     username: null,
     password: null,
+    alert: null
   });
 
-  const [alerts, setAlerts] = useState({
-    username: false,
-    password: false
-  })
+  useEffect(() => {
+    if (values.alert === null) {
+      return;
+    }
+    toast[values.alert.type](values.alert.message);
+    setTimeout(() => {
+      setValues({
+        ...values,
+        alert: null,
+      });
+    }, 1000);
+  }, [values.alert]);
 
   const [accessToken, setAccessToken] = useLocalStorage('token', null);
 
@@ -60,20 +71,33 @@ export default function Login() {
     if (accessToken) {
       history.push("/");
     } 
-    
-    let aUsername = isNullOrEmptyOrWhitespace(values.username);
-    let aPassword = isNullOrEmptyOrWhitespace(values.password);
 
-    setAlerts({
-      username: aUsername,
-      password: aPassword
-    })
-    
-    if(aUsername || aPassword) {
-      return
+    if (isNullOrEmptyOrWhitespace(values.username)) {
+      setValues({
+        ...values,
+        alert: { type: 'error', message: 'Username is not entered!' }
+      });
+      return;
+    } else if (isNullOrEmptyOrWhitespace(values.password)) {
+      setValues({
+        ...values,
+        alert: { type: 'error', message: 'Password is not entered!' }
+      });
+      return;
     }
     
-    // Fetch request hur
+    PostData('someURL', { USERNAME: values.username, PASSWORD: values.password })
+    .then(res => {
+      if (res.status === 200) {
+        history.push('/');
+      } else {
+        setValues({
+          ...values,
+          alert: { type: 'error', message: 'Error occurred. Try again.' }
+        });
+      }
+    })
+    .catch(err => console.log(err))
   }
 
   const handleSignUp = () => {
@@ -86,6 +110,17 @@ export default function Login() {
 
   return (
     <div className={classes.root}>
+    <ToastContainer
+      position='bottom-left'
+      autoClose={5000}
+      hideProgressBar={false}
+      newestOnTop={true}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+    />
       <Card className={classes.card}>
         <div className={classes.textFields}>
           <TextField
@@ -95,10 +130,6 @@ export default function Login() {
             type="search"
             variant="outlined"
             />
-            {alerts.username ?
-                <Alert severity="error">Input invalid</Alert>
-              :
-                null}
         </div>
         <div className={classes.textFields}>
           <TextField
@@ -108,10 +139,6 @@ export default function Login() {
             type="password"
             variant="outlined"
             />
-            {alerts.password ?
-                <Alert severity="error">Input invalid</Alert>
-              :
-                null}
         </div>
         <div className={classes.submitButton}>
           <Button 

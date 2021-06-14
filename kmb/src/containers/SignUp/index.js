@@ -1,10 +1,11 @@
-import { useState, useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from "@material-ui/core/styles";
 import Card from '@material-ui/core/Card';
 import TextField from "@material-ui/core/TextField";
-import Button from '@material-ui/core/Button';
-import Alert from '@material-ui/lab/Alert';
+import Button from '@material-ui/core/Button'; 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import AppContext from '../../context/AppContext';
 
@@ -40,13 +41,21 @@ export default function SignUp() {
     username: null,
     password: null,
     password2: null,
+    alert: null
   });
 
-  const [alerts, setAlerts] = useState({
-    username: false,
-    password: false,
-    password2: false,
-  })
+  useEffect(() => {
+    if (values.alert === null) {
+      return;
+    }
+    toast[values.alert.type](values.alert.message);
+    setTimeout(() => {
+      setValues({
+        ...values,
+        alert: null,
+      });
+    }, 1000);
+  }, [values.alert]);
 
   const [accessToken, setAccessToken] = useLocalStorage('token', null);
 
@@ -54,22 +63,46 @@ export default function SignUp() {
     if (accessToken) {
       history.push("/");
     } 
-    
-    let aUsername = isNullOrEmptyOrWhitespace(values.username);
-    let aPassword = isNullOrEmptyOrWhitespace(values.password);
-    let aPassword2 = isNullOrEmptyOrWhitespace(values.password) || values.password !== values.password2;
 
-    setAlerts({
-      username: aUsername,
-      password: aPassword,
-      password2: aPassword2,
-    })
-    
-    if(aUsername || aPassword || aPassword2) {
-      return
+    if (isNullOrEmptyOrWhitespace(values.username)) {
+      setValues({
+        ...values,
+        alert: { type: 'error', message: 'Username is not entered!' }
+      });
+      return; 
+    } else if (isNullOrEmptyOrWhitespace(values.password)) {
+      setValues({
+        ...values,
+        alert: { type: 'error', message: 'Password is not entered!' }
+      });
+      return; 
+    } else if (isNullOrEmptyOrWhitespace(values.password2)) {
+      setValues({
+        ...values,
+        alert: { type: 'error', message: 'Confirm Password is not entered!' }
+      });
+      return; 
+    } else if (values.password !== values.password2) {
+      setValues({
+        ...values,
+        alert: { type: 'error', message: 'Passwords do not patch!' }
+      });
+      return; 
     }
     
-    // Fetch request hur
+    PostData('someURL', { USERNAME: values.username, PASSWORD: values.password })
+      .then(res => {
+        if (res.status === 200) {
+          history.push('/createProfile');
+        } else {
+          setValues({
+            ...values,
+            alert: { type: 'error', message: 'Error occurred. Try again.' }
+          });
+        }
+      })
+      .catch(err => console.log(err))
+
   }
 
   if (accessToken) {
@@ -78,6 +111,17 @@ export default function SignUp() {
 
   return (
     <div className={classes.root}>
+      <ToastContainer
+        position='bottom-left'
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <Card className={classes.card}>
         <div className={classes.textFields}>
           <TextField
@@ -87,10 +131,6 @@ export default function SignUp() {
             type="search"
             variant="outlined"
             />
-            {alerts.username ?
-                <Alert severity="error">Input invalid</Alert>
-              :
-                null}
         </div>
         <div className={classes.textFields}>
           <TextField
@@ -100,10 +140,6 @@ export default function SignUp() {
             type="password"
             variant="outlined"
             />
-            {alerts.password ?
-                <Alert severity="error">Input invalid</Alert>
-              :
-                null}
         </div>
         <div className={classes.textFields}>
           <TextField
@@ -113,10 +149,6 @@ export default function SignUp() {
             type="password"
             variant="outlined"
             />
-            {alerts.password2 ?
-                <Alert severity="error">Input invalid</Alert>
-              :
-                null}
         </div>
         <div className={classes.submitButton}>
           <Button 
