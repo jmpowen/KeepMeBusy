@@ -43,7 +43,7 @@ const AppState = (props) => {
   const setUserData = (task) => {
     dispatch({ type: SET_USER_DATA, payload: task })
   }
-
+  /* 
   useEffect(() => {
     const genFetches = async () => {
       let [resGenData] = await Promise.all([
@@ -60,17 +60,15 @@ const AppState = (props) => {
       return;
     }
     const userFetches = async () => {
-      let [resUserData, resTasks] = await Promise.all([
-        fetch(API_URL + '/UserData').then(res => res.json()),
-        fetch(API_URL + '/Tasks').then(res => res.json())
+      let [resUserData] = await Promise.all([
+        fetch(API_URL + '/UserData').then(res => res.json())
       ]).catch(err => console.log(err))
 
       setUserData(resUserData);
-      setTasks(resTasks);
     }
     userFetches();
   }, [state.user])
-
+  /* */
   return (
     <AppContext.Provider
       value={{
