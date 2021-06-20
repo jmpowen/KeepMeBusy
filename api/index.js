@@ -1,4 +1,5 @@
 const { ApolloServer, gql } = require('apollo-server');
+//const { timestamptz } = require('graphql-scalars');
 
 const typeDefs = gql`
   enum TaskStatus {
@@ -9,83 +10,88 @@ const typeDefs = gql`
   }
 
   type User {
-    USER_ID: ID!
-    USERNAME: String
-    PASSWORD: String
-    NAME: String
-    CREATION_DATE: timestamptz
+    id: ID!
+    username: String!
+    password: String!
+    name: String!
+    #creation_date: timestamptz!
   }
 
   type Task {
-    TASK_ID: ID!
-    NAME: String
-    SUBJECT: String
-    TIME_LENGTH: Int
-    TIME_OF_DAY: [String]
+    id: ID!
+    name: String!
+    subject: String!
+    time_length: Int!
+    time_of_day: [String]! # Valid: [], [...some data]
   }
 
   type TaskLog {
-    TASK_LOG_ID: ID!
-    USER_ID: ID!
-    TASK_ID: ID!
-    STATUS: TaskStatus
-    DATE_TIME: timestamptz
+    id: ID!
+    user_id: ID!
+    task_id: ID!
+    statis: TaskStatus!
+    #DATE_TIME: timestamptz!
   }
 
   type Query {
-    user: User
+    user(id: ID): User
+    task(id: ID): Task
     tasks: [Task]
   }
 `;
 
 const users = [
   {
-    USER_ID: 0,
-    USERNAME: 'Jack',
-    PASSWORD: 'asdf',
-    CREATION_DATE: '6/15/2021'
+    id: 0,
+    username: 'Jack',
+    password: 'asdf',
   },
   {
-    USER_ID: 1,
-    USERNAME: 'asdf',
-    PASSWORD: 'Jack',
-    CREATION_DATE: '6/15/2021'
+    id: 1,
+    username: 'asdf',
+    password: 'Jack',
   },
 ];
 
 const tasks = [
   {
-    TASK_ID: 0,
-    NAME: 'Pushup Workout',
-    SUBJECT: 'Do 50 reps of pushups for at least 5 sets. Good Luck!',
-    TIME_LENGTH: 30,
-    TIME_OF_DAY: ['Anytime', 'Morning', 'Afternoon', 'Night']
+    id: "sadf",
+    name: 'Pushup Workout',
+    subject: 'Do 50 reps of pushups for at least 5 sets. Good Luck!',
+    time_length: 30,
+    time_of_day: ['Anytime', 'Morning', 'Afternoon', 'Night']
   },
   {
-    TASK_ID: 1,
-    NAME: 'Pullup Workout',
-    SUBJECT: 'Do 20 reps of pullups for at least 5 sets. Good Luck!',
-    TIME_LENGTH: 30,
-    TIME_OF_DAY: ['Anytime', 'Morning', 'Afternoon', 'Night']
+    id: "asdf",
+    name: 'Pullup Workout',
+    subject: 'Do 20 reps of pullups for at least 5 sets. Good Luck!',
+    time_length: 30,
+    time_of_day: ['Anytime', 'Morning', 'Afternoon', 'Night']
   },
   {
-    TASK_ID: 2,
-    NAME: 'Read',
-    SUBJECT: 'Exercise that brain. Fun read!',
-    TIME_LENGTH: 60,
-    TIME_OF_DAY: ['Afternoon', 'Night']
+    id: "fdsa",
+    name: 'Read',
+    subject: 'Exercise that brain. Fun read!',
+    time_length: 60,
+    time_of_day: ['Afternoon', 'Night']
   },
   {
-    TASK_ID: 3,
-    NAME: 'Practice some Spanish',
-    SUBJECT: `Exercise that brain. Practice another language with a level you're comfortable with`,
-    TIME_LENGTH: 60,
-    TIME_OF_DAY: ['Morning', 'Night']
+    id: "dasf",
+    name: 'Practice some Spanish',
+    subject: `Exercise that brain. Practice another language with a level you're comfortable with`,
+    time_length: 60,
+    time_of_day: ['Morning', 'Night']
   },
 ];
 
 const resolvers = {
   Query: {
+    user: (obj, { id }, context, info) => {
+      return users.find(user => user.id === id);
+    },
+    task: (obj, { id }, context, info) => {
+      return tasks.find(task => task.id === id);
+    },
     tasks: () => {
       return tasks;
     }
