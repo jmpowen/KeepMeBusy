@@ -8,10 +8,13 @@ import Button from '@material-ui/core/Button';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 import useLocalStorage from '../../hooks/useLocalStorage';
+import CustomPopover from '../../components/CustomPopover';
 
 const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
+      position: 'relative',
+      zIndex: 1400
     },
     appBar: {
       backgroundColor: '#4DBD0C'
@@ -37,6 +40,8 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
+  const actions = ['Profile', 'Logout']
+
 export default function Header() {
   const classes = useStyles();
   let history = useHistory();
@@ -55,6 +60,11 @@ export default function Header() {
     history.push("/login");
     // TODO: need to implement unvalidateUser action (actually just change the name to reflect the new actions use of logging in, validating, with an access token
     // and logging out, unvalidating, by setting access_token to null)
+  }
+
+  const handleAccountClick = (event) => {
+    console.log(event.target)
+    console.log(event.currentTarget)
   }
 
   return (
@@ -87,7 +97,11 @@ export default function Header() {
             </div>
           ) : null}
           {accessToken !== null ?
-              <Button onClick={handleLogout} color="inherit">Logout</Button>
+          
+          <div>
+            <CustomPopover icon={AccountCircleIcon} actions={actions} handleActionClick={handleAccountClick} />
+            {/*<Button onClick={handleLogout} color="inherit">Logout</Button>*/}
+          </div>
             :
               null
             }
