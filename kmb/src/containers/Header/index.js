@@ -5,16 +5,19 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Popover from '@material-ui/core/Popover';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 import useLocalStorage from '../../hooks/useLocalStorage';
 import CustomPopover from '../../components/CustomPopover';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
     root: {
       flexGrow: 1,
       position: 'relative',
       zIndex: 1400
+
     },
     appBar: {
       backgroundColor: '#4DBD0C'
@@ -38,7 +41,14 @@ const useStyles = makeStyles((theme) => ({
         color: 'black',
       },
     },
-  }));
+    profileButton: {
+      backgroundColor: 'white'
+    },
+    selectAction: {
+      display: "flex",
+      flexFlow: "column wrap",
+    },
+  });
 
   const actions = ['Profile', 'Logout']
 
@@ -66,6 +76,19 @@ export default function Header() {
     console.log(event.target)
     console.log(event.currentTarget)
   }
+
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popover" : undefined;
 
   return (
     <div className={classes.root}>
@@ -97,10 +120,8 @@ export default function Header() {
             </div>
           ) : null}
           {accessToken !== null ?
-          
           <div>
-            <CustomPopover icon={AccountCircleIcon} actions={actions} handleActionClick={handleAccountClick} />
-            {/*<Button onClick={handleLogout} color="inherit">Logout</Button>*/}
+            <Button className={classes.navButton} variant='outlined' onClick={handleLogout}>Logout</Button>
           </div>
             :
               null

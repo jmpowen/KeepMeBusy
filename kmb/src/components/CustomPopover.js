@@ -6,7 +6,8 @@ import Button from "@material-ui/core/Button";
 import HourglassEmptyIcon from "@material-ui/icons/HourglassEmpty";
 
 const useStyles = makeStyles({
-  root: {},
+  root: {
+  },
   selectAction: {
     display: "flex",
     flexFlow: "column wrap",
